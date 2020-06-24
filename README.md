@@ -20,7 +20,7 @@ In this part you will learn about:
 
 ## Part 4 - Camera Control
 In this part you will learn about:
-  - Logistic Regression
+  - Neural Networks
   - OpenCV
 
 ## Part 5 - What's Next?
