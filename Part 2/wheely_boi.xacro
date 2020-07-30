@@ -65,47 +65,9 @@
     </link>
   </xacro:macro>
 
-  <xacro:wheel_link name="wheelR" radius="${wheel_radius}" width="${wheel_width}" mass="0.3"/>
-  <xacro:wheel_link name="wheelL" radius="${wheel_radius}" width="${wheel_width}" mass="0.3"/>
+  <xacro:wheel_link name="wheelR" radius="${wheel_radius}" width="${wheel_width}" mass="0.03"/>
+  <xacro:wheel_link name="wheelL" radius="${wheel_radius}" width="${wheel_width}" mass="0.03"/>
   
-  <link name="wheelL">
-    <visual>
-      <geometry>
-        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
-      </geometry>
-    </visual>
-
-    <collision>
-      <geometry>
-        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
-      </geometry>
-    </collision>
-
-    <inertial>
-      <mass value="0.03"/>
-      <inertia ixx="1.75e-5" ixy="0.0" ixz="0.0" iyy="1.75e-5" iyz="0.0" izz="1.75e-5"/>
-    </inertial>
-  </link>
-
-  <link name="wheelR">
-    <visual>
-      <geometry>
-        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
-      </geometry>
-    </visual>
-
-    <collision>
-      <geometry>
-        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
-      </geometry>
-    </collision>
-
-    <inertial>
-      <mass value="0.03"/>
-      <inertia ixx="1.75e-5" ixy="0.0" ixz="0.0" iyy="1.75e-5" iyz="0.0" izz="1.75e-5"/>
-    </inertial>  
-  </link>
-
   <joint name="jointL" type="continuous">
     <parent link="edumip_body"/>
     <child link="wheelL"/>
