@@ -26,6 +26,5 @@ In this part you will learn about:
 ## Part 5 - What's Next?
 You've finished the robot! Reflect on what you've learned and how cool you are.
 There's still a whole lot to learn about though! Here are some areas we'll need to continue improving on:
-  - Simulations more relevant to our ROV (https://uuvsimulator.github.io/)
   - Computer vision for the autonomy tasks
   - Creating an interface to control our actual ROV
