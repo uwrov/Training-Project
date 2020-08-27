@@ -27,7 +27,7 @@ def main():
                                          Twist, queue_size=10)
     rospy.init_node('wheely_boi', anonymous=True)
     t = Twist()
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(wait_time)
 
     stream = VideoStream(src)
     stream.start()
