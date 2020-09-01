@@ -1,6 +1,8 @@
 # Build a Robot with ROS
 Welcome to UWROV! Over the course of this project we'll do our best to teach you what you need to know to develop for the ROV.
 
+[Solution Repo](https://github.com/uwrov/ros_solution)
+
 ## Part 1 - The Big Picture
 In this part you will learn about:
   - A big picture model of how our ROV is controlled
