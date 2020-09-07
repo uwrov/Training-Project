@@ -47,7 +47,7 @@ def find_label(frame, network):
         final_img = frame  # change me!
 
         # STEP 7: Find the contours within final_img using cv2.findContours
-        contours, _ = None  # Write different code here
+        _, contours, _ = None  # Write different code here
 
         # STEP 8: Draw a bounding box around each of the found contours
         rects = [None, None]  # You might want to change this

@@ -5,6 +5,13 @@ programs will publish messages to topics, and subscriber programs will recieve d
 
 This is a simple publisher which will take in user input and translate that to how fast it wants a robot to go.
 
+First thing we'll want to do when writing Python scripts is to specify what Python interpreter we want the program to use. We'll do this by just adding a comment at the top of the file:
+```
+#!/usr/bin/env python3
+```
+This comment isn't necessary on every computer, but you should add it in if there are multiple versions of Python installed and you want to make your Python script executable.
+
+
 Defines the publisher and sets the linear and angular velocity to the default value
 ```
 def move():
