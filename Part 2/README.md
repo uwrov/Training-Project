@@ -1,5 +1,7 @@
 # Part 2 - Building a Basic Robot
 
+Check out the working file here: [`wheely_boi.xacro`](https://github.com/uwrov/Training-Project/blob/master/src/wb/urdf/wheely_boi.xacro)
+
 A gazebo simulated robot is often defined using a URDF (Unifed Robot Description Format) file.
 
 A URDF file is not too different from an HTML file, we define positions and
@@ -25,7 +27,7 @@ The outermost layer of the xacro tells Gazebo that this is a model in xml format
   <xacro:property name="body_length" value="0.035" />
 ```
 
-### Link defintions part I
+### Link definitions part I
 Each of these three components are pointing at a specific link, and they also tell Gazebo what materials/properties it has.
   - `material` : mostly visual, in this case we are just defining colors
   - `mu1` : friction in the x direction
@@ -54,7 +56,7 @@ Each of these three components are pointing at a specific link, and they also te
 Here, we are defining links, which are each parts of the robot. In order to simulate or robot, each link needs three parts.
   - `visual` : tells Gazebo how to render the part on the screen
   - `collision` : tells Gazebo the size of the hitbox, or should be checking for collisions, usually similar to visual
-  - `intertial` : tells Gazebo how hard the object should be to move
+  - `intertial` : relates to the [inertia](https://en.wikipedia.org/wiki/Inertia) of the object
     - `value` : mass in kg
     - `ixx`, `ixy`, `ixz`, `iyy`, `iyz`, `izz` : intertial components
 ```xml
@@ -117,7 +119,7 @@ To use our macro, we call it with `xacro:_name_`, then fill in the `params` acco
 <xacro:wheel_link name="wheelL" radius="${wheel_radius}" width="${wheel_width}" mass="0.3"/>
 ```
 
-### Definining the Joints
+### Defining the Joints
 To snap the defined parts together, we have to define the joints. Joints are the connection between the links.
 
 Here are the parameters/tags

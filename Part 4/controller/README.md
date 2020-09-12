@@ -108,6 +108,10 @@ Now we'll run into some PyTorch voodoo. First we'll spend some time getting an a
 
 Next, we'll do `output = network(model_in)` to get an output from our network, then extract the corresponding label from the output and return it.
 
+When you run `cam_control.py`, you might notice that the program has pretty poor accuracy. How can this happen when our network achieves >90% accuracy on the test data?
+
+This inaccuracy most likely comes from the cropped images not looking enough like MNIST data points. So our next step in developing this controller would be to find the differences between our data and MNIST, then make appropriate changes based on that.
+
 ## Publishing
 Our publishing is essentially the same as it was in `key_in.py`, but with different signals.
 

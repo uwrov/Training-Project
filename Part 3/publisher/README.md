@@ -1,7 +1,7 @@
 # Publisher - key_input.py
 
 We need to somehow get data to our robot. ROS uses a publisher/subscriber model, where publisher
-programs will publish messages to topics, and subscriber programs will recieve data from those topics.
+programs will publish messages to topics, and subscriber programs will receive data from those topics.
 
 This is a simple publisher which will take in user input and translate that to how fast it wants a robot to go.
 
