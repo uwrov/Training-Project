@@ -2,7 +2,7 @@
 
 Working file for [`key_input.py`](https://github.com/uwrov/Training-Project/blob/master/src/wb/scripts/key_in.py).
 
-Working file for ['wb_plubin.cc`](https://github.com/uwrov/Training-Project/blob/master/src/wb/plugins/wb_plugin.cc).
+Working file for ['wb_plugin.cc`](https://github.com/uwrov/Training-Project/blob/master/src/wb/plugins/wb_plugin.cc).
 
 ## 3.1 Publishers
 Read through [`key_input.py`](https://github.com/uwrov/Training-Project/tree/master/Part%203/publisher).
