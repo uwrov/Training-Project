@@ -55,6 +55,8 @@ Then, our code tells ROS to handle the next set of events with `ros::spinOnce()`
 ## About C++
 Let's address the elephant in the room: C++.
 
+To be perfectly clear - **you do not need to be proficient in C++ by the end of this reading**.
+
 C++ is super cool, but we don't have the room in this tutorial to explore why it's cool. Instead, we'll just try to give you *just enough* language specific knowledge required to get a basic understanding of what this program does.
 
 You might be wondering: if we're not going to explain C++, why is this file written in it? Why not Python?

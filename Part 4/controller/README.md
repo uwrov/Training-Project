@@ -3,15 +3,39 @@
 Now we'll apply our newfound ML knowledge to a ROS controller.
 
 Here's our roadmap for this file
-- Make a new thread to stream video from a source
-- Load a trained model to recognized handwritten digits
-- Publish findings to '/wheely_boi/wheely_boi/cmd'
+1. Make a new thread to stream video from a source
+2. Load a trained model to recognized handwritten digits
+3. Publish findings to '/wheely_boi/wheely_boi/cmd'
 
 
 ## Threading
-The vm we're running our image recognition from doesn't have that many resources. So if we try to toss every frame of our video stream into the model, we'll be met with poor performance and a lot of lag.
+### What is threading? (Optional)
+Suppose you're cooking an [omelet](https://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/52/64/99/0SjpEWURRzKZt1avUq9h_omlet.jpg) - you have to whisk the eggs, prepare the pan, cut the vegetables, and slice the cheese. Ideally, you could do all these tasks simultaneously, but you are just one chef.
 
-To avoid this, we'll create a new thread which is dedicated to streaming the video, and occasionally grab and process a frame from it every second or so.
+Lets say you're making a super simple egg-only omelet, and follow these steps:
+1. Crack egg
+2. Whisk egg
+3. Start pan
+4. Load pan
+
+If you follow these steps in real life, you might notice a dead time between steps 3 and 4 while you wait for the pan to heat up.
+
+Instead, let's switch up the order of what we're doing:
+1. Crack egg
+2. Start pan
+3. Whisk egg
+4. Load pan
+
+Now, we've eliminated the dead time by finishing the egg prep while the pan heats up.
+
+This is the essence of threading: switching between tasks (called threads).
+
+Computers can switch between threads fast enough that they appear to be done simultaneously - which is the draw of threading.
+
+### Threading in our program
+The vm we're running our image recognition from doesn't have that many resources. So if we try to toss every frame of our video stream into the model, we'll be met with poor performance.
+
+To avoid this, we'll create a new thread which is dedicated to streaming the video, and occasionally grab a frame from it every second or so.
 
 Now let's jump into the code.
 

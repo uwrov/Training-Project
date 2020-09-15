@@ -3,7 +3,7 @@
 We need to somehow get data to our robot. ROS uses a publisher/subscriber model, where publisher
 programs will publish messages to topics, and subscriber programs will receive data from those topics.
 
-This is a simple publisher which will take in user input and translate that to how fast it wants a robot to go.
+This is a simple publisher which translates user input into force applied onto the robot.
 
 First thing we'll want to do when writing Python scripts is to specify what Python interpreter we want the program to use. We'll do this by just adding a comment at the top of the file:
 ```
@@ -27,10 +27,14 @@ def move():
 
 Our publisher constantly advertises the state of the robot, so we use a while loop.
 
-In our loop, we read in keyboard input from the user and update our geometry message t accordingly.
+In our loop, we read in keyboard input from the user (using `getch_c`) and update our geometry message `t` accordingly.
 ```Python
 while not rospy.is_shutdown():
+
+    # gather user input
     key = curses.wrapper(getch_c)
+
+    # Handle user input
     if (key == ord('w')):
         t.linear.x = min(t.linear.x + 0.1, 1.0)
     elif (key == ord('a')):
@@ -43,24 +47,13 @@ while not rospy.is_shutdown():
         t.linear.x = 0
         t.angular.z = 0
 
+    # Package input into message
     t.linear.x = close_zero(t.linear.x)
     t.angular.z = close_zero(t.angular.z)
 
+    # Publish the message
     rospy.loginfo("Sending Command v:" + str(t.linear.x)
                     + ", y:" + str(t.angular.z))
     velocity_publisher.publish(t)
     rate.sleep()
-```
-
-
-The getch_c method takes input from our keyboard and returns the value
-```Python
-def getch_c(stdscr):
-    # do not wait for input when calling getch
-    stdscr.nodelay(1)
-
-    # get keyboard input, returns -1 if none available
-    c = stdscr.getch()
-    if c != -1:
-        return c
 ```
