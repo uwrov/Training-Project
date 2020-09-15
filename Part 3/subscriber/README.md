@@ -1,106 +1,179 @@
 # Robot Plugin
 
-## Load Method
+Working file for ['wb_plugin.cc`](https://github.com/uwrov/Training-Project/blob/master/src/wb/plugins/wb_plugin.cc).
+
+There's a **lot** going on in `wb_plugin.cc` - so much that it can be pretty intimidating to read through for the first time. We'll try to break down the major sections of the code here.
+
+Again, **do not feel like you have to understand everything**, as long as you come away with a basic understanding of what the code does, that's good enough for now.
+
+## High Level Overview
+Here's a quick rundown of what this plugin does.
+
+1. Define an object `WBPlugin`
+2. Subscribe to `wheely_boi/wheely_boi/cmd`
+3. Use our commands to calculate the force to be applied onto each wheel of wheely_boi
+4. Send commands to Gazebo
+
+### 1. Defining `WBPlugin`
+This all happens in `wb_plugin.h`. See below for more detail about header files.
+
+### 2. Subscribing
+In `Load`, we have this code:
+```cpp
+node.reset(new ros::NodeHandle(name.c_str())); 
+
+...
+
+sub = new ros::Subscriber();
+*sub = node->subscribe(subName, 1, &WBPlugin::onCmd, this);
 ```
-virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
-    ...
+This code will assign a subscriber node to `node`, specifying that it wants inputs to be handled by `onCmd`.
+
+### 3. Calculations
+This is where the brunt of the code of `onUpdate` is dedicated to.
+
+This code will change wildly from robot to robot, so there isn't a strong need to understand what all the calculations in this file do.
+
+wheely_boi is concerned about how to move around on two wheels without falling over, which isn't something we need to do.
+
+That being said, the `onUpdate` function is where you'll want to put on a physics thinking hat.
+
+### 4. Sending
+At the end of `onUpdate`, we have the code:
+```cpp
+_m->GetJoint("jointR")->SetForce(0,rEff);
+_m->GetJoint("jointL")->SetForce(0,lEff); 
+
+...
+
+ros::spinOnce();
+```
+This code will set the force on the wheel joints (recall what we wrote in [`wheely_boi.xacro`](https://github.com/uwrov/Training-Project/tree/master/Part%202)). 
+
+Then, our code tells ROS to handle the next set of events with `ros::spinOnce()`.
+
+## About C++
+Let's address the elephant in the room: C++.
+
+C++ is super cool, but we don't have the room in this tutorial to explore why it's cool. Instead, we'll just try to give you *just enough* language specific knowledge required to get a basic understanding of what this program does.
+
+You might be wondering: if we're not going to explain C++, why is this file written in it? Why not Python?
+
+The answer to this question is a sad one: there's no Python interface for Gazebo.
+
+With all that said, let's explore some parts of the file:
+
+### Header Files
+You might have noticed that we have two files: `wb_plugin.cc` and `wb_plugin.h`, why have both?
+
+This is a kind of stylistic choice which is tied to necessity.
+
+C/C++ are lazy, and their compilers work through the programs line by line. This means that this Java practice won't work in C/C++:
+
+```c
+1   void A() {
+2       B();
+3   }
+4   
+5   void B() {
+6       System.out.print("hi");
+7   }
+```
+This will throw an error in C/C++, as the compiler won't recognize `B()` as a function when it's first called on line 2 because it hasn't been *declared* yet.
+
+To fix this, we can simply declare `B()` up top:
+```
+1   void B();
+2
+3   void A() {
+4       B();
+5   }
+6   
+7   void B() {
+8       System.out.print("hi");
+9   }
+```
+Now when we call `B()` on line 4, the compiler will know it's a function, and fill in the function *definition* using the code from line 7 onward.
+
+As you can probably guess, this can cause some headaches, so we can put all our function declarations into a **header file**, and just include it at the top of our file.
+
+To make the best of an unfortunate situation, we go a step further and treat the header files as an "interface" or "front facing" side of our code. Another programmer should be able to read our header file and understand what our code is capable of.
+
+Here's a quick list on how well styled code should be divided:
+
+- Header Files (.h, .hh, .hpp, or whatever you want)
+  - Class / Function declarations
+  - Class / Function comments
+  - Macros
+  - Imports
+- Code Files (.cc)
+  - Class / Function definitions
+  - Code
+  - Inline comments
+  - Imports
+
+
+### Classes
+C++ supports objects! If you're familiar with Java objects then you should recognize most of the items.
+
+Here's an example class ClassName's declaration, which extends ParentClass:
+```cpp
+// This would be within a header file
+class ClassName : public ParentClass {
+ public:
+  ClassName();
+  void A();
+ private:
+  int a_;
+  int b_;
+};
+```
+
+`private` and `public` are basically the same as in Java. `private` data members can't be accessed externally (with some exceptions). `public` data members can be accessed by anyone or anything.
+
+Also note the stylistic choice to append `_` to private data member's names. This is arbitrary (`wb_plugin.cc` has the `_` at the front), but make sure to have something to distinguish your private data members.
+ 
+Now if we want to add definitions, we would do this code:
+
+```cpp
+// This would be in a code (.cc) file
+void ClassName::A() {
+    // code
 }
 ```
-Here, we are overriding the ModelPlugin's Load function
-- The method is called every time the plugin is loaded
-- Parameter 1: The pointer to our robot's physics model
-- Parameter 2: The pointer to our robot's SDF (this is like an interpreted URDF)
 
-Components of the Load Method
+And that's the long and short of C++ classes!
+
+### Pointers
+Pointers are variables which store the address of other variables.
+
+Pointers are one of the features of C/C++ which allow us to have finer control over our program's memory usage, which is one of the main draws of the language family.
+
+Now examine the following code:
+```cpp
+// Construct a new ClassName called a
+ClassName a = ClassName();
+
+// Make a pointer a_ptr to point to the address of a
+ClassName* a_ptr = &a;
+
+// Call a.A()
+a.A();
+
+// Call a.A(), but through the pointer to a!
+a_ptr->A();
 ```
-virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
-{
-  _m = _model;
+This isn't a great example about how pointers *should* be used, but it's a simple example about how pointers *could* be used.
 
-  if(!ros::isInitialized)
-  {
-    ROS_FATAL_STREAM("ROS node for Gazebo not established. Plugin failed");
-    return;
-  }
-  ROS_INFO("Wheely Boi Plugin Loaded");
+There's a lot more to learn about pointers, but we won't bet getting into them here.
 
-  // For some reason the joint friction isn't loaded from the URDF
-  // so we have to manually update them here
-  _m->GetJoint("jointR")->SetParam("friction", 0, 0.0);
-  _m->GetJoint("jointL")->SetParam("friction", 0, 0.0);
-
-  std::string name = _m->GetName();
-
-  // Spawn our node
-  ROS_INFO("Spawning node: %s", name.c_str());
-  node.reset(new ros::NodeHandle(name.c_str())); 
-  ROS_INFO("Node spawned.");
-
-  // Initialize our ROS subscriber
-  sub = new ros::Subscriber();
-  std::string subName = name + "/cmd";
-  *sub = node->subscribe(subName, 1, &WBPlugin::onCmd, this);
-
-  _w = _m->GetWorld();
-  lastSimTime = _w->SimTime();
-
-  lc_V = lc_Y = 0;
-  lc_T = lastSimTime;
-
-  // Initialize our prior positions and rotations.
-  pRot = _m->WorldPose().Rot();
-  pPos = _m->WorldPose().Pos();
-
-  // Bind our onUpdate function to a callback that happens every nanosecond
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&WBPlugin::onUpdate, this, _1));
-}
+### Namespaces
+Let's look at the equivalent of `System.out.println("Hello world")` in C++:
+```cpp
+std::cout << "Hello world" << std::endl;
 ```
-- The if statement ensures that the ROS master node has been launched. It will terminate the program otherwise.
-- Some initial states that are not loaded from the URDF can be set in the Load method (ex: friction).
-- The Load method is also where we spawn in the model, initialize the ROS subscriber and initialize initial positions and rotations.
-- In the Load method, we have to bind the onUpdate function to be called every nanosecond.
-
-## onUpdate Method
-Updates the movement every nanosecond
-- create a timeout for every nanosecond, since a real microcontroller does not process at that rate
-  - get current time, define length of wait period and timeout
-  - if currentTime - lastCheckedTime < waitTime, return (exit method)
-  - if currentTime - timeOfLastCommand > timeout, set timeOfLastCommand = currentTime and set veloccity and yaw values to 0
-
-- Gets the current rotation and position information
-```
-ignition::math::Quaternion<double> rot = _m->WorldPose().Rot();
-ignition::math::Vector3<double> pos = _m->WorldPose().Pos();
-```
-and the distance travelled in the last timestamp
-```
-ignition::math::Vector3<double> dist = pos - pPos;
-```
-
-- Determine the desired speed by multiplying the maximum linear velocity and the last given velocity command
-```
-double desVel = lc_V * MAX_LIN_V;
-```
-
-- Get the current rotation values
-```
-double roll = rot.Roll();
-double pitch = rot.Pitch();
-double yaw = rot.Yaw();
-```
-and the change in angular velocities by subtracting the previous rotation values
-```
-double yawV = yaw - pRot.Yaw();
-double pitchV = pitch - pRot.Pitch();
-```
-
-- Determine if the velocity is positive or negative (using math I don't understand), indicating whether the robot travels forward or backward compared to its "front"
-```
-double velSign = SIGN(dist.X() * cos(yaw) + dist.Y() * sin(yaw));
-double vel = velSign * sqrt(dist.X() * dist.X() + dist.Y() * dist.Y());
-```
-
-- Determine how much we can yaw without the robot falling over
-```
-double maxYV = NZ(((MAX_LIN_V-MAG(vel))/(MAX_LIN_V))*MAX_YAW_V, 0.00001);
+If we get annoyed of typing `std::`, we can do something like this:
+```cpp
+namespace std {
+cout << "Hello world" << endl;
 ```

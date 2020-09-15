@@ -1,3 +1,5 @@
+.vscode/*
+.vscode
 
 # Created by https://www.toptal.com/developers/gitignore/api/ros,python,c++,visualstudiocode,vim,emacs,sublimetext
 # Edit at https://www.toptal.com/developers/gitignore?templates=ros,python,c++,visualstudiocode,vim,emacs,sublimetext
