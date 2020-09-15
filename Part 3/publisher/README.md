@@ -13,7 +13,7 @@ This comment isn't necessary on every computer, but you should add it in if ther
 
 
 Defines the publisher and sets the linear and angular velocity to the default value
-```
+```Python
 def move():
     # Create a new node
     velocity_publisher = rospy.Publisher('/wheely_boi/wheely_boi/cmd', Twist, queue_size=10)
@@ -28,7 +28,7 @@ def move():
 Our publisher constantly advertises the state of the robot, so we use a while loop.
 
 In our loop, we read in keyboard input from the user and update our geometry message t accordingly.
-```
+```Python
 while not rospy.is_shutdown():
     key = curses.wrapper(getch_c)
     if (key == ord('w')):
@@ -54,7 +54,7 @@ while not rospy.is_shutdown():
 
 
 The getch_c method takes input from our keyboard and returns the value
-```
+```Python
 def getch_c(stdscr):
     # do not wait for input when calling getch
     stdscr.nodelay(1)

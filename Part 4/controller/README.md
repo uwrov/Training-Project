@@ -15,7 +15,7 @@ To avoid this, we'll create a new thread which is dedicated to streaming the vid
 
 Now let's jump into the code.
 
-```
+```Python
 from threading import Thread
 from tools.VideoStream import VideoStream
 
@@ -27,7 +27,7 @@ stream.start()
 
 This chunk of code creates a new VideoStream object, and that's where the threading magic happens.
 
-```
+```Python
 class VideoStream(Thread):
     def __init__(self, src=0):
         Thread.__init__(self)
@@ -44,7 +44,7 @@ It's a little hidden in this function but all our digit recognition happens with
 `find_label()` is a function which lives in `cam_util.py`, a utility file which contains some useful functions.
 
 Let's walk through a call to `find_label()`:
-```
+```Py
 final_img = img_to_mnist(frame)
 
 def img_to_mnist(frame):
@@ -61,13 +61,13 @@ First we'll do some filtering on our input frame with `img_to_mnist()`. Recall t
 2. `cv2.GaussianBlur`: Next we'll apply a blur to the image to reduce noise. This is helpful as it'll reduce the amount of contours we'll have to sift through later.
 3. `cv2.adaptiveThreashold`: This function will make our image close to black and white. It's responsible for making our image look like an MNIST data point.
 
-```
+```Python
 contours, _ = cv2.findContours(final_img.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
 ```
 Next, we'll apply contours and identify the boundaries in our image. This will hopefully give us an outline of our handwritten digit if `img_to_mnist` did its job correctly.
 
-```
+```py
 rects = [cv2.boundingRect(contour) for contour in contours]
 rects = [rect for rect in rects if rect[2] >= 3 and rect[3] >= 8]
 
@@ -79,7 +79,7 @@ rect = rects[max_rect_i]
 ```
 Here we are singling out the largest rectangle present in the image (if there is one) and drawing a bounding box around it.
 
-```
+```py
 mnist_frame = extract_digit(frame, final_img, rect, pad = 15)
 
 def extract_digit(frame, img, rect, pad = 10, SIZE=28):
@@ -94,7 +94,7 @@ def extract_digit(frame, img, rect, pad = 10, SIZE=28):
 ```
 Given the predetermined rectangle and its contents, the image is cropped and resized to better fit our model using the `extract_digit()` method. Smaller images are ignored.
 
-```
+```py
 model_in = torch.tensor(mnist_frame).float()
 # lift model into appropriate dim
 model_in = model_in.unsqueeze(0).unsqueeze(0)
@@ -116,7 +116,7 @@ This inaccuracy most likely comes from the cropped images not looking enough lik
 Our publishing is essentially the same as it was in `key_in.py`, but with different signals.
 
 In our while loop, we'll simply tell ROS to publish a message according to what our model decides the output should be.
-```
+```py
 publish(find_label(frame, network), t, velocity_publisher)
 
 def publish(signal, t, velocity_publisher):
