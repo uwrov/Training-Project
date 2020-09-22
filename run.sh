@@ -1,3 +1,11 @@
+# DO NOT RUN ME! PLEASE JUST RUN THE COMMANDS LISTED HERE ONE BY ONE
+echo "Please don't run me >:("
+echo "I will now enter an infinte loop! Ctrl+C to stop"
+while true
+do
+  sleep 1
+done
+
 # Create URDF from xacro
 rosrun xacro xacro wheely_boi.xacro > wb.urdf
 
