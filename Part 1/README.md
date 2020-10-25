@@ -39,6 +39,3 @@ A nice benefit of handling program-program communication using a publish/subscri
 ROS mainly supports C++ and Python, but there are libraries which add support for other languages like Java and Ruby.
 
 We'll be focusing on C++ and Python in this project (mainly Python). You're welcome to approach tasks in the future in whatever language you want, but our club will only be able to give useful feedback if you're using C++ or Python.
-
-Underwater simulator
-https://github.com/clydemcqueen/orca2
