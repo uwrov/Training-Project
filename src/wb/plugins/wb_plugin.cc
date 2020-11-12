@@ -96,7 +96,7 @@ void WBPlugin::onUpdate(const common::UpdateInfo &inf) {
   _m->GetJoint("jointR")->SetForce(0,rEff);
 
   // STEP 1: Set the force applied onto the left joint "jointL"
-  //         Hint: Look at line 194
+  //         Hint: Look at line 96
 
   // Update prior position and rotation info.
   pRot = rot;
